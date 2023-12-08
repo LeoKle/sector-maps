@@ -4,8 +4,10 @@ from classes.Sector import Sector
 
 
 class Airspace:
-    def __init__(self, id: str, group: str, owner: List[str], sectors: List[Sector]):
-        self.id = id
+    def __init__(
+        self, airspace_id: str, group: str, owner: List[str], sectors: List[Sector]
+    ):
+        self.airspace_id = airspace_id
         self.group = group
         self.owner = owner
         self.sectors = sectors
