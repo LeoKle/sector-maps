@@ -1,6 +1,6 @@
 from data.fetchData import fetch_data
-from data.settings import load_sector_settings
-from classes.convertObject import convert_objects_to_airspace
+from settings.settings import load_sector_settings
+from utils.convertObject import convert_objects_to_airspace
 from plotting.plotSector import create_sector_plot
 
 

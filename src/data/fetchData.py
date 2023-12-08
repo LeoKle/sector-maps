@@ -1,6 +1,6 @@
 import requests
 
-from data.settings import load_url
+from settings.settings import load_url
 
 
 def fetch_json(url):

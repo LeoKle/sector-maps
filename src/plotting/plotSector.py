@@ -81,9 +81,6 @@ def create_sector_plot(sector, airspaces):
         latitudes = [convertLat(point.lat) for point in subsector.points]
         longitudes = [convertLong(point.long) for point in subsector.points]
 
-        latitudes.append(latitudes[0])
-        longitudes.append(longitudes[0])
-
         # Convert latitudes and longitudes to map coordinates
         x, y = m(longitudes, latitudes)
 
