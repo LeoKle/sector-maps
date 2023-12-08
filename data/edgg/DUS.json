@@ -1,0 +1,18 @@
+[
+  {
+    "sector_to_plot": "DUS",
+    "title": "Düsseldorf",
+    "subtitle": "DUS",
+    "neighbours": ["BOT", "PADL"]
+  },
+  {
+    "sector_to_plot": "ALR",
+    "title": "ALR",
+    "neighbours": ["EIDW", "DST"]
+  },
+  {
+    "sector_to_plot": "NDG",
+    "title": "NDG",
+    "neighbours": ["ZUG", "TRU", "RDG"]
+  }
+]
