@@ -30,6 +30,22 @@ class SectorPlotter:
         for sector in self.sector_settings:
             self.create_sector_plot(sector, self.airspaces)
 
+    def plot_subsectors(self, ax, airspace, border_color="grey", fill_color="grey"):
+        for subsector in airspace.sectors:
+            # Extract latitudes and longitudes from sector's points
+            latitudes = [convertLat(point.lat) for point in subsector.points]
+            longitudes = [convertLong(point.long) for point in subsector.points]
+
+            latitudes.append(latitudes[0])
+            longitudes.append(longitudes[0])
+
+            # Convert latitudes and longitudes to map coordinates
+            x, y = self.m(longitudes, latitudes)
+
+            # Plot the sector
+            ax.plot(x, y, linewidth=0.5, c=border_color)
+            ax.fill(x, y, alpha=0.05, c=fill_color)
+
     def create_sector_plot(self, sector, airspaces):
         sector_name = sector.get("sector_to_plot")
         sector_airspace = find_airspace_by_owner(airspaces, sector_name)
@@ -73,7 +89,7 @@ class SectorPlotter:
         fig, ax = plt.subplots(nrows=1, ncols=1)
         center_lat, center_lng = find_center_coords()
 
-        m = Basemap(
+        self.m = Basemap(
             width=1,
             height=1,
             resolution="l",
@@ -82,33 +98,16 @@ class SectorPlotter:
             lon_0=center_lng,
         )
 
+        # Plot subsectors
         for neighbour_airspace in neighbours_airspaces:
-            for subsector in neighbour_airspace.sectors:
-                # Extract latitudes and longitudes from sector's points
-                latitudes = [convertLat(point.lat) for point in subsector.points]
-                longitudes = [convertLong(point.long) for point in subsector.points]
+            self.plot_subsectors(
+                ax, neighbour_airspace, border_color="grey", fill_color="grey"
+            )
 
-                latitudes.append(latitudes[0])
-                longitudes.append(longitudes[0])
-
-                # Convert latitudes and longitudes to map coordinates
-                x, y = m(longitudes, latitudes)
-
-                # Plot the sector
-                ax.plot(x, y, linewidth=0.5, c="grey")
-                ax.fill(x, y, alpha=0.05, c="grey")
-
-        for subsector in sector_airspace.sectors:
-            # Extract latitudes and longitudes from sector's points
-            latitudes = [convertLat(point.lat) for point in subsector.points]
-            longitudes = [convertLong(point.long) for point in subsector.points]
-
-            # Convert latitudes and longitudes to map coordinates
-            x, y = m(longitudes, latitudes)
-
-            # Plot the sector
-            ax.plot(x, y, linewidth=0.5, c="orange")
-            ax.fill(x, y, alpha=0.1, c="orange")
+        # Plot main sector
+        self.plot_subsectors(
+            ax, sector_airspace, border_color="orange", fill_color="orange"
+        )
 
         scale = sector.get("scale") if sector.get("scale") is not None else 0
         x_min, x_max = ax.get_xlim()
