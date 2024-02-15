@@ -6,7 +6,7 @@ import numpy as np
 
 from classes.Airspace import find_airspace_by_owner
 from classes.DataProvider import DataProvider
-from utils.coordinates import convertLat, convertLong
+from utils.coordinates import convertLat, convertLong, find_center_coords
 from utils.convertObject import convert_objects_to_airspace
 
 
@@ -54,7 +54,7 @@ class SectorPlotter:
         if sector_airspace is None:
             return
 
-        def find_center_coords():
+        def find_center_coords_main_sector():
             total_lat = 0
             total_lon = 0
             total_points = 0
@@ -87,7 +87,7 @@ class SectorPlotter:
                 return center_lat, center_lon
 
         fig, ax = plt.subplots(nrows=1, ncols=1)
-        center_lat, center_lng = find_center_coords()
+        center_lat, center_lng = find_center_coords_main_sector()
 
         self.m = Basemap(
             width=1,
@@ -102,6 +102,19 @@ class SectorPlotter:
         for neighbour_airspace in neighbours_airspaces:
             self.plot_subsectors(
                 ax, neighbour_airspace, border_color="grey", fill_color="grey"
+            )
+            center_lat, center_lng = find_center_coords(neighbour_airspace)
+            x, y = self.m(center_lng, center_lat)
+            print(center_lat, center_lng, x, y)
+
+            ax.text(
+                x,
+                y,
+                neighbour_airspace.airspace_id,
+                va="center",
+                ha="center",
+                fontsize=7,
+                color="red",
             )
 
         # Plot main sector

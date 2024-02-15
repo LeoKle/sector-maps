@@ -37,3 +37,26 @@ def split_Long(str):
     third_part = int(str[5:])
 
     return first_part, second_part, third_part
+
+
+def find_center_coords(sector):
+    total_lat = 0
+    total_lon = 0
+    total_points = 0
+
+    # coordinates of main sector
+    for subsector in sector.sectors:
+        for point in subsector.points:
+            total_lat += convertLat(point.lat)
+            total_lon += convertLong(point.long)
+            total_points += 1
+
+    if total_points == 0:
+        print("0, 0")
+        return 0, 0
+    else:
+        center_lat = total_lat / total_points
+        center_lon = total_lon / total_points
+
+        print(center_lat, center_lon)
+        return center_lat, center_lon
